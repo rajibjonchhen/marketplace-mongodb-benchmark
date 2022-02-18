@@ -135,5 +135,29 @@ usersRouter.delete("/:userId", async (req, res, next) => {
   }
 });
 
+/***************************** update specific user*****************************/
+
+/***************************** update specific user*****************************/
+
+usersRouter.put("/:userId/cart", async (req, res, next) => {
+    try {
+      const userId = req.params.userId;
+      const reqUser = await UserModel.findById(userId)
+      if (reqUser) {
+          const specificProduct = reqUser.cart(id => id.toString() === req.body._id)
+          if(specificProduct){
+
+          }else {
+
+          }
+        res.status(200).send(updatedUser);
+      } else {
+        next(createError(404, "could not find the specific user"));
+      }
+    } catch (error) {
+      next(error);
+    }
+  });
+  
 
 export default usersRouter;
