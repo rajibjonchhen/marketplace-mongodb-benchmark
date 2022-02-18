@@ -5,6 +5,7 @@ import productsRouter from "./service/products/products.js";
 import cors from 'cors'
 import { badRequestHandler, genericErrorHandler, notFoundHandler, unauthorizedHandler } from "./service/handlers/errorHandler.js";
 import usersRouter from "./service/users/users.js";
+import cartsRouter from "./service/cart/cart.js";
 const {PORT = 3001} = process.env
 
 const server = express()
@@ -14,6 +15,7 @@ server.use(express.json())
 
 server.use("/products", productsRouter)
 server.use("/users", usersRouter)
+server.use("/carts", cartsRouter)
 
 
 mongoose.connect(process.env.Mongo_Connection)
