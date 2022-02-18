@@ -11,7 +11,7 @@ const productSchema = new Schema({
 	    "price": {type: Number,required : true},
 		"reviews": [{
 			comment:String,
-			rate: Number
+			rate: {type:Number, min:1, max:5}
 		}],
     },
     {

@@ -3,7 +3,7 @@ import mongoose  from "mongoose";
 import listEndpoints from 'express-list-endpoints'
 import productsRouter from "./service/products/products.js";
 import cors from 'cors'
-import { badRequestHandler, genericErrorHandler, notFoundHandler, unauthorizedHandler } from "./service/products/errorHandler.js";
+import { badRequestHandler, genericErrorHandler, notFoundHandler, unauthorizedHandler } from "./service/handlers/errorHandler.js";
 const {PORT = 3001} = process.env
 
 const server = express()

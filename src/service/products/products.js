@@ -169,5 +169,140 @@ productsRouter.delete("/:productId", async (req, res, next) => {
   }
 });
 
+/**************************** add review to specific Product ******************************/
+productsRouter.post("/:productId/reviews", async (req, res, next) => {
+  try {
+    const productId = req.params.productId;
+    const newReview = { ...req.body };
+    const product = await ProductModel.findById(productId);
+    if (product) {
+      const modifiedProduct = await ProductModel.findByIdAndUpdate(
+        productId,
+        { $push: { reviews: newReview } },
+        { new: true }
+      );
+      res.status(201).send(modifiedProduct);
+    } else {
+      next(
+        createError(404, "could not find the specific product with id", productId)
+      );
+    }
+  } catch (error) {
+    next(error);
+  }
+});
 
+/**************************** get all reviews to specific product ******************************/
+productsRouter.get("/:productId/reviews", async (req, res, next) => {
+  try {
+    const productId = req.params.productId;
+    const product = await ProductModel.findById(productId);
+    if (product) {
+      res.status(200).send(product.reviews);
+    } else {
+      next(
+        createError(404, "could not find the specific product with id", productId)
+      );
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**************************** get specific review from specific product ******************************/
+productsRouter.get("/:productId/reviews/:reviewId", async (req, res, next) => {
+  try {
+    const product = await ProductModel.findById(req.params.productId);
+    if (product) {
+      const reqReview = product.reviews.find(
+        (review) => review._id.toString() === req.params.reviewId
+      );
+      if (reqReview) {
+        res.status(200).send(reqReview);
+      } else {
+        next(
+          createError(
+            404,
+            "could not find the specific review with id",
+            req.params.reviewId
+          )
+        );
+      }
+    } else {
+      next(
+        createError(
+          404,
+          "could not find the specific product with id",
+          req.params.productId
+        )
+      );
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**************************** delete specific review from specific product ******************************/
+productsRouter.delete("/:productId/reviews/:reviewId", async (req, res, next) => {
+  try {
+    const modifiedProduct = await ProductModel.findByIdAndUpdate(
+      req.params.productId,
+      { $pull: { reviews: { _id: req.params.reviewId } } },
+      { new: true }
+    );
+
+    if (modifiedProduct) {
+      res.send(modifiedProduct);
+    } else {
+      next(
+        createError(
+          404,
+          "could not find the specific product with id",
+          req.params.productId
+        )
+      );
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**************************** edit specific review from specific product ******************************/
+productsRouter.put("/:productId/reviews/:reviewId", async (req, res, next) => {
+  try {
+    const reqProduct = await ProductModel.findByIdAndUpdate(req.params.productId);
+
+    if (reqProduct) {
+      const index = reqProduct.reviews.findIndex(
+        (review) => review._id.toString() === req.params.reviewId
+      );
+      if (index !== -1) {
+        reqProduct.reviews[index] = {
+          ...reqProduct.reviews[index].toObject(),
+          ...req.body,
+        };
+        await reqProduct.save();
+        res.send(reqProduct);
+      } else {
+        next(
+          createError(
+            404,
+            "could not find the specific product with id",
+            req.params.productId
+          )
+        );
+      }
+    } else {
+      next(
+        createError(
+          404,
+          "could not find the specific product with id",
+          req.params.productId
+        )
+      );
+    }
+  } catch (error) {
+    next(error);
+  }
+});
 export default productsRouter;
