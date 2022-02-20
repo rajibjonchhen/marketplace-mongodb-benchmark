@@ -64,10 +64,12 @@ productsRouter.get("/", async (req, res, next) => {
 productsRouter.get("/:productId", async (req, res, next) => {
   try {
     const productId = req.params.productId;
-    const product = await ProductModel.findById(productId)
+    console.log(productId)
+    if (productId) {
+      const product = await ProductModel.findById(productId)
+      console.log(product)
     res.status(200).send(product);
 
-    if (true) {
     } else {
       next(createError(404, "could not find the specific "));
     }
