@@ -46,7 +46,7 @@ try {
 /******************** get all the product from specific user's cart ********************/ 
 cartsRouter.get("/:userId", async(req, res, next) => { 
     try {
-        const cart = await CartModel.find({
+        const cart = await CartModel.findOne({
             userId : req.params.userId,
             status: "active"
         })
