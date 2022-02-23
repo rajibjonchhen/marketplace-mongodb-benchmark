@@ -8,6 +8,7 @@ const productSchema = new Schema({
 	    "category": {type:String, required:true},
 	    "brand": {type:String, required:true},
 	    "imageUrl":{type:String},
+		"productRating":{type:Number},
 	    "price": {type: Number,required : true},
 		"reviews": [{
 			comment:String,

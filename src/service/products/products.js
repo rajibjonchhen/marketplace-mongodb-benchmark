@@ -175,8 +175,14 @@ productsRouter.delete("/:productId", async (req, res, next) => {
 productsRouter.post("/:productId/reviews", async (req, res, next) => {
   try {
     const productId = req.params.productId;
-    const newReview = { ...req.body };
+
     const product = await ProductModel.findById(productId);
+    
+    let productRating = product.reviews.reduce((prev,curr) => 
+      prev.rate + curr.rate)
+
+    console.log(productRating)
+    const newReview = { ...req.body };
     if (product) {
       const modifiedProduct = await ProductModel.findByIdAndUpdate(
         productId,
